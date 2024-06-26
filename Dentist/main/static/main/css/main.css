@@ -1,0 +1,222 @@
+body {
+    height: auto;
+    width: auto;
+}
+
+h1 {
+    font-family: "Lato", sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    font-style: normal;
+    text-transform: uppercase;
+    text-align: center;
+    justify-content: center;
+    margin-top: 18px;
+    font-family: "Vollkorn SC", serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+div{
+    margin: 12px;
+}
+
+#consultation{
+    border: 2px solid #3430E8;
+    border-radius: 40px;
+    width: 320px;
+    height: 70px;
+    font-size: 26px;
+}
+
+#consultation:hover{
+    border: 2px solid #8A88FD;
+}
+
+.card{
+    width: 230px;
+    height: 300px;
+    background-color: #D4E8F1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    text-align: center;
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.card img {
+    width: 130px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.appointmentForm {
+    background-color: #8f9297;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.appointmentForm input,
+.appointmentForm textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #00b7ff;
+    background-color: transparent;
+    color: black;
+    font-size: 18px;
+}
+
+.appointmentForm input::placeholder,
+.appointmentForm textarea::placeholder {
+    color: black;
+}
+
+.appointmentForm .btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #00b7ff;
+    background-color: transparent;
+    color: black;
+    font-size: 18px;
+}
+
+.appointmentForm .btn:hover {
+    background-color: #00b7ff;
+    color: white;
+}
+
+.container p{
+    font-size: 22px;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200px;
+    font-style: normal;
+}
+
+#all {
+    position: relative;
+    width: 250px;
+    height: 70px;
+    border-radius: 30px;
+    font-size: 27px;
+    background-color: #05426C;
+    color: white;
+    margin: 10px;
+    border-color: white;
+    transition: color 0.5s ease;
+}
+
+#all:before {
+	content:'';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 60px;
+	background-color: white;
+	border-radius: 5px;
+	transition: all 0.5s ease;
+    color: black;
+}
+
+#all:hover {
+	/* width: 100%; */
+    color: black;
+    background-color: #ffffff;
+}
+
+.carousel-item img {
+    width: 100vw;
+    height: 800px;
+}
+
+.carousel-item p {
+    font-size: 32px;
+    color: black;
+    font-family: "Ledger", serif;
+    font-weight: 600;
+    font-style: normal;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    border-radius: 50%;
+    width: 52px;
+    height: 54px;
+    line-height: 50px;
+    border: 3px solid rgb(17, 72, 221);
+}
+
+.carousel-caption {
+    margin-bottom: 250px;
+    bottom: 200px;
+    text-align: left;
+    margin-left: -200px; 
+}
+
+
+.container-docs {
+    display: flex;
+    gap: 50px;
+}
+
+#doc1,
+#doc2,
+#doc3 {
+    width: 400px;
+    height: 600px;
+    border: 3px solid #0E3B71;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    gap: 10px;
+}
+
+.container-docs img {
+    width: 250px;
+    height: 330px;
+    border-radius: 15px;
+}
+
+.container-docs p {
+    font-size: 23px;
+    font-family: "Ledger", serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.container-docs li {
+    font-size: 22px;
+    font-family: "Ledger", serif;
+    font-weight: 200;
+    font-style: normal;
+    text-align: center;
+    padding-top: 5px;
+}
+
+h2 {
+    color: #333333;
+    font-family: "Montserrat", Sans-serif;
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 46px;
+    margin: 10px;
+}
