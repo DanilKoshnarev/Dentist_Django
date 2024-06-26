@@ -16,10 +16,6 @@ p#authorized {
     color: darkblue;
 }
 
-#auth {
-    font-size: 17px;
-}
-
 #authorized {
     font-size: large;
     display: flex;
@@ -92,13 +88,13 @@ header nav {
 }
 
 header nav a, header nav p {
-    color: black;
     text-decoration: none;
-    margin: 40px;
-    font-family: "Jura", sans-serif;
+    margin: 30px;
+    font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 700;
-    font-size: 22px;
+    color: #7a7a7a;
+    font-style: normal;
+    font-size: 20px;
     margin-top: 40px;
 }
 

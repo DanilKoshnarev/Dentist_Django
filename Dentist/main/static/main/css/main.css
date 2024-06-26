@@ -137,17 +137,36 @@ div{
     background-color: #ffffff;
 }
 
-.carousel-item img {
+.carousel-item {
+    position: relative;
     width: 100vw;
-    height: 800px;
+    height: 900px;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0) 65%);
+    pointer-events: none; 
 }
 
 .carousel-item p {
-    font-size: 32px;
-    color: black;
-    font-family: "Ledger", serif;
-    font-weight: 600;
-    font-style: normal;
+    font-size: 26px;
+    color: #333333;
+    font-family: "Montserrat", Sans-serif;
+    font-weight: 400;
+    line-height: 46px;
     white-space: nowrap;
     display: flex;
     align-items: center;
@@ -160,6 +179,14 @@ div{
     height: 54px;
     line-height: 50px;
     border: 3px solid rgb(17, 72, 221);
+}
+
+.carousel-control-prev {
+    left: -4%;
+}
+
+.carousel-control-next {
+    right: -4%;
 }
 
 .carousel-caption {
