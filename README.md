@@ -2,6 +2,26 @@
 
 В цьому проекті ми працюємо над створенням веб-сайту для стоматологічної клініки.
 
+## Швидка карту файлу
+- [Dentist Clinic](#dentist-clinic)
+  - [Швидка карту файлу](#швидка-карту-файлу)
+  - [Учасники проекту](#учасники-проекту)
+  - [Технології](#технології)
+  - [Структура проекту](#структура-проекту)
+  - [Початок роботи](#початок-роботи)
+- [Моделі, використані у проекті](#моделі-використані-у-проекті)
+  - [Category](#category)
+  - [Service](#service)
+- [Функції, використані у проекті](#функції-використані-у-проекті)
+  - [Registration](#registration)
+  - [Authorization](#authorization)
+  - [Logout](#logout)
+  - [Main](#main)
+  - [Price](#price)
+- [Використання javascript у проекті](#використання-javascript-у-проекті)
+  - [Javascript in registration](#javascript-in-registration)
+  - [Javascript in authorization](#javascript-in-authorization)
+
 ## Учасники проекту
 
 1. Уляна Шамільова (Team Lead)
@@ -45,15 +65,46 @@
 - ***Bootstrap*** - фреймворк для зручної та швидкої розробки інтерфейсу;
 - ***Figma*** - інструмент для створення дизайну веб-сторінки без логіки.
 
-## Сторінки
+<!-- ## Сторінки
 
 - Головна
 - Послуги
 - Контакти
 - Інформація
-- Сторінки авторизації та реєстрації
+- Сторінки авторизації та реєстрації -->
 
-## Моделі, використані у проекті
+## Структура проекту
+
+```mermaid
+graph TD
+
+  C{DENTIST CLINIC}
+  C -->|main| A[used for the main page] --> 1(templates) --> 2(static) --> 3(views.py)
+  C -->|login| B[used for user registration and authorization] --> 4(templates) --> 5(static) --> 6(views.py)
+  C -->|price| M[used for the price page] --> 7(models.py) --> 8(templates) --> 9(static) --> 10(views.py)
+  C -->|static_apps| D[used for the contact, information and services page] --> 11(templates) --> 12(static) --> 13(views.py)
+```
+## Початок роботи
+1. Спочатку склонуйте репозиторій:
+   ```
+   git clone https://github.com/UlyanaShamilova/Dentist_Django.git
+   ```
+2. Перейдіть у директорію проекту:
+   ```
+   cd Dentist
+   ```
+3. Встановіть необхідні бібліотеки:
+   django: фреймворк для роботи з веб-сайтом (https://www.djangoproject.com/).
+    ```
+    pip install django
+    ```
+4. Запустіть сервер
+   ```
+   python manage.py runserver
+   ```
+
+# Моделі, використані у проекті
+## Category
 ```python
    class Category(models.Model):
       name = models.CharField(max_length=255)
@@ -62,6 +113,7 @@
 Ця модель використовується для представлення категорії послуг. Наприклад, категорії включають такі елементи, як "Ортодонтичні послуги", "Хірургічні втручання" тощо.
 Модель має 1 поле: назва категорії.
 
+## Service
 ```python
    class Service(models.Model):
     name = models.CharField(max_length=255)
@@ -72,8 +124,9 @@
 Ця модель використовується для представлення конкретної послуги, що надається клінікою. Наприклад, послуги включають такі елементи, як "Пломбування", "Видалення зуба" тощо.
 Кожна послуга має три поля: назва послуги, ціна послуги, та категорію, до якої вона відноситься.
 
-## Функції, використані у проекті
+# Функції, використані у проекті
 
+## Registration
 Функція реєстрації користувача, яка перевіряє введення вірних даних:
 
 ```python
@@ -97,6 +150,7 @@ def reg_func(request):
                         )
     return render(request, 'login/reg.html')
 ```
+## Authorization
 Функція авторизації користувача на сайті:
 
 ```python
@@ -112,7 +166,7 @@ def auth_func(request):
                 return redirect('main_page')  
     return render(request, 'login/auth.html')
 ```
-
+## Logout
 Функція виходу з акаунту на сайті:
 
 ```python
@@ -122,6 +176,7 @@ def logout_view(request):
         return redirect('main_page') 
 ```
 
+## Main
 Функція, яка відправляє повідомлення з проблемою клієнта на пошту клініки:
 
 ```python
@@ -140,6 +195,7 @@ def main_func(request):
 
 ```
 
+## Price
 У цій функції ми отримуємо дані з моделей, і виводимо їх на сайт:
 
 ```python
@@ -153,8 +209,9 @@ def price_func(request):
     return render(request, 'price/price.html', context = {'categories': categories,'services': Service.objects.all()})
 ```
 
-## Використання ajax у проекті
+# Використання javascript у проекті
 
+## Javascript in registration
 Тут ми отримуємо дані користувача з форми реєстрації, яку він заповнює, і перевіряємо на наявність помилок, не оновлюючи сторінки:
 
 ```javascript
@@ -206,7 +263,7 @@ $(document).ready(function() {
 })
 })
 ```
-
+## Javascript in authorization
 Тут ми отримуємо дані користувача з форми реєстрації, яку він заповнює, і перевіряємо на наявність помилок, не оновлюючи сторінки:
 
 ```javascript
