@@ -38,12 +38,12 @@
 
 ## Технології
 
-- HTML/CSS - мови розмітки, які використовуються для створення та стилізації веб-сторінки;
-- Python/Django - мовиапрограмування та її фреймворк, які використовуються для написання логіки веб-сайту;
-- Ajax - використовується для асинхронної взаємодії з сервером для оновлення частини веб-сторінки без повного перезавантаження;
-- SQLite3/MySQL - бази даних, які використовуються для зберігання даних користувача(логін, пароль) на сервері;
-- Bootstrap - фреймворк для зручної та швидкої розробки інтерфейсу;
-- Figma - інструмент для створення дизайну веб-сторінки без логіки.
+- ***HTML/CSS*** - мови розмітки, які використовуються для створення та стилізації веб-сторінки;
+- ***Python/Django*** - мовиапрограмування та її фреймворк, які використовуються для написання логіки веб-сайту;
+- ***Ajax*** - використовується для асинхронної взаємодії з сервером для оновлення частини веб-сторінки без повного перезавантаження;
+- ***SQLite3/MySQL*** - бази даних, які використовуються для зберігання даних користувача(логін, пароль) на сервері;
+- ***Bootstrap*** - фреймворк для зручної та швидкої розробки інтерфейсу;
+- ***Figma*** - інструмент для створення дизайну веб-сторінки без логіки.
 
 ## Сторінки
 
@@ -54,12 +54,20 @@
 - Сторінки авторизації та реєстрації
 
 ## Моделі, використані у проекті
-![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/b92d5924-d599-4742-a9f6-1a80509c24df)
+```python
+   class Category(models.Model):
+      name = models.CharField(max_length=255)
+```
 
 Ця модель використовується для представлення категорії послуг. Наприклад, категорії включають такі елементи, як "Ортодонтичні послуги", "Хірургічні втручання" тощо.
 Модель має 1 поле: назва категорії.
 
-![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/91267b5a-f5c6-4b19-9522-f636eb155245)
+```python
+   class Service(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.CharField(max_length=255)
+    category = models.ForeignKey(Category,related_name='select_category',on_delete=models.CASCADE) # Зв'язок моделей для зв'язування категорій та моделей
+```
 
 Ця модель використовується для представлення конкретної послуги, що надається клінікою. Наприклад, послуги включають такі елементи, як "Пломбування", "Видалення зуба" тощо.
 Кожна послуга має три поля: назва послуги, ціна послуги, та категорію, до якої вона відноситься.
@@ -68,8 +76,27 @@
 
 Функція реєстрації користувача, яка перевіряє введення вірних даних:
 
-![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/f58cc1b3-f573-4561-8ad8-c0dbbbf699ad)
+```python
+def reg_func(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
 
+        special_chars = ["@", ";", ",", "!", "$", "#", "%", "^", ":", "&", ".", "*", "(", ")", "[", "]", "{", "}", "_"]
+
+        if username and email and password and confirm_password:
+            if not any(char in username for char in special_chars):
+                if '@' in email:
+                    if password == confirm_password:
+                        User.objects.create_user(
+                            username=username,
+                            email=email,
+                            password=password
+                        )
+    return render(request, 'login/reg.html')
+```
 Функція авторизації користувача на сайті:
 
 ![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/c5110151-6f81-4a3d-a6a0-3f6344710ecd)
