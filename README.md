@@ -19,8 +19,8 @@
   - [Main](#main)
   - [Price](#price)
 - [Використання javascript у проекті](#використання-javascript-у-проекті)
-  - [Javascript in registration](#javascript-in-registration)
-  - [Javascript in authorization](#javascript-in-authorization)
+  - [Javascript в реєстрації](#javascript-в-реєстрації)
+  - [Javascript в авторизації](#javascript-в-авторизації)
 
 ## Учасники проекту
 
@@ -206,44 +206,44 @@ def main_func(request):
 
 ```python
 def price_func(request):
-   # Отримуємо дані з моделі категорій
-    categories = Category.objects.all()
-    if request.method == 'POST':
-        if request.POST.get('search'):
-            categories = categories.filter(name__icontains = request.POST.get('search'))
-            
+    categories = Category.objects.all() # Отримуємо дані з моделі категорій
     return render(request, 'price/price.html', context = {'categories': categories,'services': Service.objects.all()})
 ```
 
 # Використання javascript у проекті
 
-## Javascript in registration
+## Javascript в реєстрації
 Тут ми отримуємо дані користувача з форми реєстрації, яку він заповнює, і перевіряємо на наявність помилок, не оновлюючи сторінки:
 
 ```javascript
 $(document).ready(function() {
     $("#regBt").click(function(event) {
         event.preventDefault();
-        var username = $("#username").val(); 
-        var email = $("#email").val();
-        var password = $("#password").val();
-        var confirm_password = $("#confirm_password").val();
-        var csrf_token = $("[name='csrfmiddlewaretoken']").val(); 
+        var username = $("#username").val(); // Ім'я, яке вводить користувач при реєстрації
+        var email = $("#email").val(); // Пошта, яку вводить користувач при реєстрації
+        var password = $("#password").val(); // Пароль, який вводить користувач при реєстрації
+        var confirm_password = $("#confirm_password").val(); // Підтвердження паролю, який вводить користувач при реєстрації
+        var csrf_token = $("[name='csrfmiddlewaretoken']").val();
 
         $.ajax({
             url: "/reg/",
             type: "POST",
-            data: {
+            data: { // Дані, які ввів користувач
                 username: username,
                 email: email,
                 password: password,
                 confirm_password: confirm_password,
                 csrfmiddlewaretoken: csrf_token
             },
+            // Дії, які виконуються в разі успішної реєстрації
             success: function() {
+                // Перевірка, чи всі поля заповнені
                 if (username && password && email && confirm_password) {
+                    // Перевірка на спеціальні символи в імені користувача
                     if (! email.includes("@", ";", ',', '!', '$', '#', ' %', '^', ':', '&', '.', '*', '(', ')', '[', ']', '{', '}')){
+                        // Перевірка на коректу ел.пошту
                         if (email.includes("@")){
+                            // Перевірка на співпадання паролів
                              if (password == confirm_password){
                                  $("#errorReg").text('Вас успішно зареєстровано!');
                                  $("#errorReg").css({'color':'red'})
@@ -269,7 +269,7 @@ $(document).ready(function() {
 })
 })
 ```
-## Javascript in authorization
+## Javascript в авторизації
 Тут ми отримуємо дані користувача з форми реєстрації, яку він заповнює, і перевіряємо на наявність помилок, не оновлюючи сторінки:
 
 ```javascript
@@ -277,11 +277,9 @@ $(document).ready(function() {
 $(document).ready(function() {
     $("#authBt").click(function(event) {
         event.preventDefault();
-        var username = $("#username").val();
-        var password = $("#password").val();
+        var username = $("#username").val(); // Ім'я, яке вводить користувач при реєстрації
+        var password = $("#password").val(); // Пароль, який вводить користувач при реєстрації
         var csrf_token = $("[name='csrfmiddlewaretoken']").val(); 
-
-        console.log('Starting AJAX request');
 
         $.ajax({
             url: "/auth/",
@@ -292,6 +290,7 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: csrf_token
             },
             success: function(response) {
+                // Перевірка на те, чи заповнені усі поля
                 if (username && password) {
                     $('#authorized').text(username);
                     console.log('success ajax');

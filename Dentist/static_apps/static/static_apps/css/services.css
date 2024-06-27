@@ -57,7 +57,11 @@ img{
 }
 
 h3{
-    font-weight: bold;
+    font-family: "Lora", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    color: black;
     font-size: 28px;
     margin-bottom: 25px;
 }
@@ -76,8 +80,9 @@ h3{
 
 li {
     font-size: 22px;
-    font-family: "Kanit", sans-serif;
-    font-weight: 500;
+    font-family: "Lora", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
     font-style: normal;
     margin-bottom: 10px;
 }
