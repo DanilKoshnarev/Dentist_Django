@@ -18,8 +18,8 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: csrf_token
             },
             success: function() {
-                if (username && password && email && confirm_password) {
-                    if (! email.includes("@", ";", ',', '!', '$', '#', ' %', '^', ':', '&', '.', '*', '(', ')', '[', ']', '{', '}')){
+                if (! username && password && email && confirm_password) {
+                    if (! username.includes("@", ";", ',', '!', '$', '#', ' %', '^', ':', '&', '.', '*', '(', ')', '[', ']', '{', '}')){
                         if (email.includes("@")){
                              if (password == confirm_password){
                                  $("#errorReg").text('Вас успішно зареєстровано!');
@@ -39,9 +39,9 @@ $(document).ready(function() {
                          }
                     }else {
                         $("#errorReg").text('Заповніть усі поля, вас не зареєстровано!');
-                    } 
-                          
+                    }        
                 }
-})
-})
-})
+            }
+        )}
+    )}
+) 
