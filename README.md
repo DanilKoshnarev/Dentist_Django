@@ -99,26 +99,145 @@ def reg_func(request):
 ```
 Функція авторизації користувача на сайті:
 
-![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/c5110151-6f81-4a3d-a6a0-3f6344710ecd)
+```python
+def auth_func(request):
+    if request.method == 'POST':
+        username = request.POST.get('login')
+        password = request.POST.get('password')
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect('main_page')  
+    return render(request, 'login/auth.html')
+```
 
 Функція виходу з акаунту на сайті:
 
-![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/84a8909a-8122-4470-88ba-88d50ffb8cb7)
+```python
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('main_page') 
+```
 
 Функція, яка відправляє повідомлення з проблемою клієнта на пошту клініки:
 
-![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/0a6e936a-5f95-46dc-81c7-dc38bbeecfdc)
+```python
+def main_func(request):
+    if request.method == "POST":
+        name = request.POST.get("name") # Ім'я користувача, яке беремо з текстового поля
+        email = request.POST.get('email') # Пошта користувача, яку беремо з текстового поля
+        problem = request.POST.get('problem') #Проблема користувача, яку беремо з текстового поля
+        send_mail( # Метод відправлення повідомлення на пошту
+            'Проблема', # Заголовок повідомлення
+            f"Ім'я клієнта: {name} \nПроблема: {problem}", # Зміст повідомлення
+            settings.EMAIL_HOST_USER, # Пошта, з якої відправляємо повідомлення, яку беремо з налаштувань
+            [email] # Список отримувачів повідомлення
+            )
+    return render(request, 'main/main.html')
+
+```
 
 У цій функції ми отримуємо дані з моделей, і виводимо їх на сайт:
 
-![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/49d7f55e-a03a-490d-b4bc-c776d7397a55)
+```python
+def price_func(request):
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        print(123)
+        if request.POST.get('search'):
+            categories = categories.filter(name__icontains = request.POST.get('search'))
+            
+    return render(request, 'price/price.html', context = {'categories': categories,'services': Service.objects.all()})
+```
 
 ## Використання ajax у проекті
 
 Тут ми отримуємо дані користувача з форми реєстрації, яку він заповнює, і перевіряємо на наявність помилок, не оновлюючи сторінки:
 
-![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/8ee59af1-7081-4299-ac9f-77af9f779e42)
+```javascript
+$(document).ready(function() {
+    $("#regBt").click(function(event) {
+        event.preventDefault();
+        var username = $("#username").val();
+        var email = $("#email").val();
+        var password = $("#password").val();
+        var confirm_password = $("#confirm_password").val();
+        var csrf_token = $("[name='csrfmiddlewaretoken']").val(); 
+
+        $.ajax({
+            url: "/reg/",
+            type: "POST",
+            data: {
+                username: username,
+                email: email,
+                password: password,
+                confirm_password: confirm_password,
+                csrfmiddlewaretoken: csrf_token
+            },
+            success: function() {
+                if (username && password && email && confirm_password) {
+                    if (! email.includes("@", ";", ',', '!', '$', '#', ' %', '^', ':', '&', '.', '*', '(', ')', '[', ']', '{', '}')){
+                        if (email.includes("@")){
+                             if (password == confirm_password){
+                                 $("#errorReg").text('Вас успішно зареєстровано!');
+                                 $("#errorReg").css({'color':'red'})
+                                 $("#username").text('');
+                                 $("#email").text('');
+                                 $("#password").text('');
+                                 $("#confirm_password").text('');   
+                                 }else {
+                                     $("#errorReg").text('Паролі не співпадають, вас не зареєстровано!');
+                                 }            
+                             }else {
+                                 $("#errorReg").text('Введіть коректну пошту, вас не зареєстровано!');
+                             }   
+                         }else {
+                            $("#errorReg").text('Спеціальні символи, вас не зареєстровано!');
+                         }
+                    }else {
+                        $("#errorReg").text('Заповніть усі поля, вас не зареєстровано!');
+                    } 
+                          
+                }
+})
+})
+})
+```
 
 Тут ми отримуємо дані користувача з форми реєстрації, яку він заповнює, і перевіряємо на наявність помилок, не оновлюючи сторінки:
 
-![image](https://github.com/UlyanaShamilova/Dentist_Django/assets/110716865/a058c769-2a46-4967-8271-4ba113c6f32f)
+```javascript
+
+$(document).ready(function() {
+    $("#authBt").click(function(event) {
+        event.preventDefault();
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var csrf_token = $("[name='csrfmiddlewaretoken']").val(); 
+
+        console.log('Starting AJAX request');
+
+        $.ajax({
+            url: "/auth/",
+            type: "POST",
+            data: {
+                username: username,
+                password: password,
+                csrfmiddlewaretoken: csrf_token
+            },
+            success: function(response) {
+                if (username && password) {
+                    $('#authorized').text(username);
+                    console.log('success ajax');
+                } else {
+                    $("#errorAuth").text('Заповніть усі поля, вас не авторизовано!');
+                }
+            }
+        });
+    });
+});
+
+```
