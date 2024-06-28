@@ -243,3 +243,7 @@ h2 {
     font-style: normal;
     font-size: 21px;
 }
+
+.modal-content {
+    background-color: #8f9297; /* Серый цвет фона */
+  }
