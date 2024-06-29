@@ -7,8 +7,10 @@
   - [Швидка карта файлу](#швидка-карта-файлу)
   - [Учасники проекту](#учасники-проекту)
   - [Технології](#технології)
+  - [Сторінки](#сторінки)
   - [Структура проекту](#структура-проекту)
   - [Початок роботи](#початок-роботи)
+- [Додаткові налаштування проекту](#додаткові-налаштування-проекту)
 - [Моделі, використані у проекті](#моделі-використані-у-проекті)
   - [Category](#category)
   - [Service](#service)
@@ -21,6 +23,7 @@
 - [Використання javascript у проекті](#використання-javascript-у-проекті)
   - [Javascript в реєстрації](#javascript-в-реєстрації)
   - [Javascript в авторизації](#javascript-в-авторизації)
+- [Файл .gitignore](#файл-gitignore)
 
 ## Учасники проекту
 
@@ -65,13 +68,13 @@
 - ***Bootstrap*** - фреймворк для зручної та швидкої розробки інтерфейсу;
 - ***Figma*** - інструмент для створення дизайну веб-сторінки без логіки.
 
-<!-- ## Сторінки
+## Сторінки
 
-- Головна
-- Послуги
+- **Головна** - на цій сторінці розміщена загальна інформація про послуги клініки та контакти
+- Послуги - 
 - Контакти
 - Інформація
-- Сторінки авторизації та реєстрації -->
+- Сторінки авторизації та реєстрації
 
 ## Структура проекту
 
@@ -102,6 +105,24 @@ graph TD
    ```
    python manage.py runserver
    ```
+
+# Додаткові налаштування проекту
+```python
+# Налаштування для відправки електронних листів через SMTP сервер Gmail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Використовуємо SMTP бекенд для надсилання листів
+EMAIL_HOST = 'smtp.gmail.com'  # Адреса SMTP сервера Gmail
+EMAIL_PORT = 587  # Порт для SMTP сервера Gmail
+EMAIL_USE_TLS = True  # Використовуємо TLS (Transport Layer Security) для захисту з'єднання
+EMAIL_HOST_USER = 'ulanasamileva1@gmail.com'  # Адреса електронної пошти, з якої будуть відправлятися листи
+EMAIL_HOST_PASSWORD = 'yqzg yaxy gbyf rwpd'  # Пароль додатку для цієї електронної пошти
+```
+- SMTP сервер - сервер для відправки листів на електронну пошту
+
+```python
+# Підключення статичних файлів, таких як CSS, JS, картинки
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, '/static')
+```
 
 # Моделі, використані у проекті
 ## Category
@@ -218,88 +239,109 @@ def price_func(request):
 ```javascript
 $(document).ready(function() {
     $("#regBt").click(function(event) {
-        event.preventDefault();
-        var username = $("#username").val(); // Ім'я, яке вводить користувач при реєстрації
-        var email = $("#email").val(); // Пошта, яку вводить користувач при реєстрації
-        var password = $("#password").val(); // Пароль, який вводить користувач при реєстрації
-        var confirm_password = $("#confirm_password").val(); // Підтвердження паролю, який вводить користувач при реєстрації
-        var csrf_token = $("[name='csrfmiddlewaretoken']").val();
+        event.preventDefault(); // Запобігання стандартної поведінки форми
+        var username = $("#username").val(); // Отримання ім'я користувача
+        var email = $("#email").val(); // Отримання пошти користувача
+        var password = $("#password").val(); // Отримання паролю користувача
+        var confirm_password = $("#confirm_password").val(); // Отримання повторного вводу паролю
+        var csrf_token = $("[name='csrfmiddlewaretoken']").val(); // Отримання значення CSRF-токена (це спеціальний код, який додається до кожної форми або запиту на сайті)
 
+        // Масив спеціальних символів для перевірки
+        var special_chars = ["@", ";", ",", "!", "$", "#", "%", "^", ":", "&", ".", "*", "(", ")", "[", "]", "{", "}", "_"];
+        var has_special_char = special_chars.some(char => username.includes(char)); // Перевірка наявності спеціальних символів в імені користувача
+
+        // Перевірка заповнення всіх полів
+        if (!username || !email || !password || !confirm_password) {
+            $("#errorReg").text('Заповніть усі поля, вас не зареєстровано!'); // Відображення помилки
+            return;
+        }
+
+        // Перевірка наявності спеціальних символів у username
+        if (has_special_char) {
+            $("#errorReg").text('Спеціальні символи, вас не зареєстровано!'); // Відображення помилки
+            return;
+        }
+
+        // Перевірка коректності email
+        if (!email.includes("@")) {
+            $("#errorReg").text('Введіть коректну пошту, вас не зареєстровано!'); // Відображення помилки
+            return;
+        }
+
+        // Перевірка відповідності паролів
+        if (password !== confirm_password) {
+            $("#errorReg").text('Паролі не співпадають, вас не зареєстровано!'); // Відображення помилки
+            return;
+        }
+
+        // AJAX-запит на реєстрацію користувача
         $.ajax({
-            url: "/reg/",
-            type: "POST",
-            data: { // Дані, які ввів користувач
+            url: "/reg/", // посилання для запиту
+            type: "POST", // Тип запиту
+            data: { // Дані для запиту
                 username: username,
                 email: email,
                 password: password,
                 confirm_password: confirm_password,
                 csrfmiddlewaretoken: csrf_token
             },
-            // Дії, які виконуються в разі успішної реєстрації
-            success: function() {
-                // Перевірка, чи всі поля заповнені
-                if (username && password && email && confirm_password) {
-                    // Перевірка на спеціальні символи в імені користувача
-                    if (! email.includes("@", ";", ',', '!', '$', '#', ' %', '^', ':', '&', '.', '*', '(', ')', '[', ']', '{', '}')){
-                        // Перевірка на коректу ел.пошту
-                        if (email.includes("@")){
-                            // Перевірка на співпадання паролів
-                             if (password == confirm_password){
-                                 $("#errorReg").text('Вас успішно зареєстровано!');
-                                 $("#errorReg").css({'color':'red'})
-                                 $("#username").text('');
-                                 $("#email").text('');
-                                 $("#password").text('');
-                                 $("#confirm_password").text('');   
-                                 }else {
-                                     $("#errorReg").text('Паролі не співпадають, вас не зареєстровано!');
-                                 }            
-                             }else {
-                                 $("#errorReg").text('Введіть коректну пошту, вас не зареєстровано!');
-                             }   
-                         }else {
-                            $("#errorReg").text('Спеціальні символи, вас не зареєстровано!');
-                         }
-                    }else {
-                        $("#errorReg").text('Заповніть усі поля, вас не зареєстровано!');
-                    } 
-                          
-                }
-})
-})
-})
+            success: function(response) {
+                $("#errorReg").text("Вас успішно зареєстровано!"); // Відображення успішного повідомлення
+                $("#errorReg").css({'color': 'green'}); // Зміна кольору повідомлення
+                $("#username").val(''); // Очищення поля "username"
+                $("#email").val(''); // Очищення поля "email"
+                $("#password").val(''); // Очищення поля "password"
+                $("#confirm_password").val(''); // Очищення поля "confirm_password"
+            },
+            error: function(xhr) {
+                var error = JSON.parse(xhr.responseText); // Отримання помилки з відповіді сервера
+                $("#errorReg").text(error.error); // Відображення помилки
+                $("#errorReg").css({'color': 'red'}); // Зміна кольору повідомлення
+            }
+        });
+    });
+});
 ```
 ## Javascript в авторизації
 Тут ми отримуємо дані користувача з форми реєстрації, яку він заповнює, і перевіряємо на наявність помилок, не оновлюючи сторінки:
 
 ```javascript
-
 $(document).ready(function() {
     $("#authBt").click(function(event) {
-        event.preventDefault();
-        var username = $("#username").val(); // Ім'я, яке вводить користувач при реєстрації
-        var password = $("#password").val(); // Пароль, який вводить користувач при реєстрації
-        var csrf_token = $("[name='csrfmiddlewaretoken']").val(); 
+        event.preventDefault(); // Запобігання стандартної поведінки форми
+        var username = $("#username").val(); // Отримання імені користувача
+        var password = $("#password").val(); // Отримання паролю користувача
+        var csrf_token = $("[name='csrfmiddlewaretoken']").val(); // Отримання значення CSRF-токена
 
+        // AJAX-запит на авторизацію користувача
         $.ajax({
-            url: "/auth/",
-            type: "POST",
-            data: {
+            url: "/auth/", // Посилання для запиту
+            type: "POST", // Тип запиту
+            data: { // Дані для запиту
                 username: username,
                 password: password,
                 csrfmiddlewaretoken: csrf_token
             },
             success: function(response) {
-                // Перевірка на те, чи заповнені усі поля
                 if (username && password) {
-                    $('#authorized').text(username);
-                    console.log('success ajax');
+                    $('#authorized').text(username); // Відображення авторизованого користувача
+                    console.log('success ajax'); // Виведення повідомлення в консоль
                 } else {
-                    $("#errorAuth").text('Заповніть усі поля, вас не авторизовано!');
+                    $("#errorAuth").text('Заповніть усі поля, вас не авторизовано!'); // Відображення помилки
                 }
             }
         });
     });
 });
-
 ```
+
+# Файл .gitignore
+```python
+# Ігнорування папки міграцій
+**/migrations/
+
+# Ігнорування всі файлів pyc
+*.pyc
+__pycache__/
+```
+- Ці налаштування у файлі .gitignore допомагають уникнути додавання автоматично згенерованих файлів міграцій і скомпільованих байт-кодів Python до репозиторію, що запобігає конфліктам і зберігає чистоту проекту.
