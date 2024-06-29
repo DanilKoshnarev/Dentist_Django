@@ -1,6 +1,6 @@
 # Dentist Clinic
 
-В цьому проекті ми працюємо над створенням веб-сайту для стоматологічної клініки.
+Dentist Clinic — це проект написанний на мові програмування Python та фреймворці Django, створений командою з 4 розробників як випускний іспит для курсу Full Stack Development. Цей проект – це веб-сайт, який забезпечує пацієнтів інформацією про клініку та послуги, дозволяє швидко вирішити проблему, надіславши лист на електронну пошту спеціалістам та отримувати консультації.
 
 ## Швидка карта файлу
 - [Dentist Clinic](#dentist-clinic)
@@ -70,11 +70,12 @@
 
 ## Сторінки
 
-- **Головна** - на цій сторінці розміщена загальна інформація про послуги клініки та контакти
-- Послуги - 
-- Контакти
-- Інформація
-- Сторінки авторизації та реєстрації
+- **Головна** - на цій сторінці розміщена загальна інформація про послуги клініки та контакти.
+- **Послуги** - на цій сторінці розміщені всі послуги, які надає клініка.
+- **Ціни** - на цій сторінці розміщені ціни на всі послуги, що надає клініка.
+- **Контакти** - на цій сторінці розміщені контакти клініки, зокрема номер телефону, адреса, пошта, години роботи.
+- **Інформація** - на цій сторінці розміщена інформація, яку лікарі клініки вважають необхідною.
+- **Сторінки авторизації та реєстрації** - на цих сторінках можна зареєстуватися або авторизуватися на сайті.
 
 ## Структура проекту
 
@@ -114,7 +115,7 @@ EMAIL_HOST = 'smtp.gmail.com'  # Адреса SMTP сервера Gmail
 EMAIL_PORT = 587  # Порт для SMTP сервера Gmail
 EMAIL_USE_TLS = True  # Використовуємо TLS (Transport Layer Security) для захисту з'єднання
 EMAIL_HOST_USER = 'ulanasamileva1@gmail.com'  # Адреса електронної пошти, з якої будуть відправлятися листи
-EMAIL_HOST_PASSWORD = 'yqzg yaxy gbyf rwpd'  # Пароль додатку для цієї електронної пошти
+EMAIL_HOST_PASSWORD = 'деякий пароль'  # Пароль додатку для цієї електронної пошти
 ```
 - SMTP сервер - сервер для відправки листів на електронну пошту
 
@@ -126,6 +127,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, '/static')
 
 # Моделі, використані у проекті
 ## Category
+
 ```python
    class Category(models.Model):
       name = models.CharField(max_length=255) 
@@ -219,8 +221,30 @@ def main_func(request):
             [email] # Список отримувачів повідомлення
             )
     return render(request, 'main/main.html')
-
 ```
+
+```html
+  <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title fs-5" id="myModalLabel">Заповніть форму</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="POST" class="appointmentForm">
+            {% csrf_token %}
+            <input type="text" placeholder="Ваше ім'я" name="name">
+            <input type="text" placeholder="Ваша ел.пошта" name="email">
+            <input type="text" placeholder="Проблема" name="problem">
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Відправити</button>
+            </div>
+          </form>
+        </div>
+```
+- Це код для створення модального вікна, яке має форму для написання своєї проблеми. Модальне вікно створювалось за допомогою фреймворку Bootstrap.
+![alt text](image.png)
 
 ## Price
 У цій функції ми отримуємо дані з моделей, і виводимо їх на сайт:
@@ -230,6 +254,7 @@ def price_func(request):
     categories = Category.objects.all() # Отримуємо дані з моделі категорій
     return render(request, 'price/price.html', context = {'categories': categories,'services': Service.objects.all()})
 ```
+![alt text](image-1.png)
 
 # Використання javascript у проекті
 
